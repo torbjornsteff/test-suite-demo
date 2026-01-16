@@ -4,38 +4,41 @@
  * This file contains all selectors and interactions for the SauceDemo shopping cart page.
  * Users land here after clicking the cart icon from the inventory page.
  */
+const header = require('./components/headerComponent');
+const footer = require('./components/footerComponent');
 
 module.exports = {
   // Define selectors for cart page elements
   elements: {
-    // TODO: Add cart items container selector
-    // Hint: Find the container that holds all cart items
-    // cartItemsContainer: '.cart_list',
+    header_container: header.elements,
+        
+    sub_header_menu_container:{
+      container_id: '[data-test="secondary-header"]',
+      title: '[data-test="title"]',
+      quantity_label: '[data-test="cart-quantity-label"]',
+      description_label: '[data-test="cart-desc-label"]',
+    },
     
-    
-    // TODO: Add individual cart item selector
-    // Hint: Find individual cart item elements
-    // cartItem: '.cart_item',
-    
-    
-    // TODO: Add product name in cart selector
-    // Hint: Find where product names are displayed in the cart
-    // cartItemName: '.inventory_item_name',
-    
-    
-    // TODO: Add checkout button selector
-    // Hint: Find the "Checkout" button
-    // checkoutButton: '#checkout',
-    
-    
-    // TODO: Add "Continue Shopping" button selector
-    // Hint: Find the button to go back to inventory
-    // continueShopping: '#continue-shopping',
-    
-    
-    // TODO: Add remove button selector (for removing items from cart)
-    // Hint: Find the "Remove" button for cart items
-    // removeButton: '[data-test*="remove"]',
+    cart_list_container:{
+      container: '[data-test="cart-list"]',
+      items: '[data-test="inventory_item"]',
+      item_elements: {
+        quantity_label: '[data-test="cart-item-quantity"]',
+        product_link: '[data-test="item-{itemId}-title-link"]', // Format: item-0-title-link, item-1-title-link, etc. (based on product position)
+        product_name: '[data-test="inventory_item_name"]',
+        product_description: '[data-test="inventory_item_desc"]',
+        product_price: '[data-test="inventory_item_price"]',
+        remove_button: '[data-test^="remove-"]', // Matches any remove button (e.g., remove-sauce-labs-backpack)
+      }
+    },
+
+    cart_footer_container:{
+      container: '[data-test="cart-footer"]',
+      continue_shopping_button: '[data-test="continue-shopping"]',
+      checkout_button: '[data-test="checkout"]',
+    },
+
+    footer_container: footer.elements,
   },
   
   commands: [

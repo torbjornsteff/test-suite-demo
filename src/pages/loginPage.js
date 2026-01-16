@@ -14,25 +14,39 @@ module.exports = {
   
   // Define page elements and their selectors
   elements: {
-    // TODO: Add username input field selector
-    // Hint: Inspect the login page to find the input element
-    // The selector should be a CSS selector like '#user-name' or '[data-test="username"]'
-    // usernameInput: '#user-name',
+    title: '#root > div > div.login_logo',
+    login_container: {
+      container_id: '[data-test="login-container"]',
+      usernameInput: '[data-test="username"]',
+      passwordInput: '[data-test="password"]',
+    loginButton: '[data-test="login-button"]',  
+    error_state: {
+      errorMessage: '#login_button_container > div > form > div.error-message-container.error',
+      close_error_button: '[data-test="error-button"]', 
+      error_Icon_username: '#login_button_container > div > form > div:nth-child(1) > svg',
+      error_Icon_password: '#login_button_container > div > form > div:nth-child(2) > svg > path',
+    }
     
-    
-    // TODO: Add password input field selector
-    // Hint: Find the password input element
-    // passwordInput: '#password',
-    
-    
-    // TODO: Add login button selector
-    // Hint: Find the login button element
-    // loginButton: '#login-button',
-    
-    
-    // TODO: Add error message selector (for negative tests)
-    // Hint: Find the error message container
-    // errorMessage: '[data-test="error"]',
+  },
+  login_credentials_container: {
+    container_id: '[data-test="login-credentials-container"]',
+    user_container: {
+      container_id: '[data-test="login-credentials"]',
+      container_title: '#login_credentials > h4',
+
+      //All these id's are commented out due to missing CSS selectors and data test id\s. Could have used xpath, but chose not to, due to the elements them selves not being critical for functionality of the site.  
+      // standard_user: '#login_credentials > :nth-child(1)',
+      // locked_out_user: '#login_credentials > :nth-child(2)',
+      // problem_user: '#login_credentials > :nth-child(3)', 
+      // performance_glitch_user: '#login_credentials > :nth-child(4)',
+      // error_user: '#login_credentials > :nth-child(5)',
+      // visual_user: '#login_credentials > :nth-child(6)',
+    },
+    password_container: {
+      password: '[data-test="login-password"]',
+      container_title: '#root > div > div.login_wrapper > div.login_credentials_wrap > div > div.login_password > h4',
+    }
+  }
   },
   
   // Define page actions/commands
