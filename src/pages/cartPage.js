@@ -48,36 +48,55 @@ module.exports = {
        * 
        * Usage: cartPage.verifyCartLoaded()
        */
-      // TODO: Implement verifyCartLoaded
-      // Hint: Check that cart items container is visible
-      
+      verifyCartLoaded: function() {
+        this.waitForElementVisible('[data-test="cart-list"]', 5000);
+        this.expect.element('[data-test="title"]').text.to.equal('Your Cart');
+        return this;
+      },
       
       /**
        * Get count of items in cart
        * 
        * Usage: cartPage.getCartItemCount((count) => { console.log(count); })
        */
-      // TODO: Implement getCartItemCount
-      // Hint: Count the number of cart item elements
-      
+      getCartItemCount: function(cb) {
+        this.api.elements('css selector', '[data-test="inventory-item"]', res => {
+          const count = res.value ? res.value.length : 0;
+          if (cb) cb(count);
+        });
+        return this;
+      },
       
       /**
        * Get product names in cart
        * 
        * Usage: cartPage.getProductNames((names) => { console.log(names); })
        */
-      // TODO: Implement getProductNames
-      // Hint: Get text of all product name elements and return as array
-      
+      getProductNames: function(cb) {
+        const names = [];
+        this.api.elements('css selector', '[data-test="inventory-item-name"]', res => {
+          if (!res.value || res.value.length === 0) {
+            if (cb) cb([]);
+            return;
+          }
+          res.value.forEach((el, idx) => {
+            this.api.elementIdText(el.ELEMENT, textRes => {
+              names.push(textRes.value);
+              if (idx === res.value.length - 1 && cb) cb(names);
+            });
+          });
+        });
+        return this;
+      },
       
       /**
        * Click checkout button
        * 
        * Usage: cartPage.clickCheckout()
        */
-      // TODO: Implement clickCheckout
-      // Hint: Click the checkout button
-      
+      clickCheckout: function() {
+        return this.click('[data-test="checkout"]');
+      },
       
       /**
        * Remove item from cart by index
@@ -86,8 +105,15 @@ module.exports = {
        * 
        * Usage: cartPage.removeItem(0)
        */
-      // TODO: Implement removeItem
-      // Hint: Find and click the remove button for a specific item by index
+      removeItem: function(itemIndex) {
+        this.api.elements('css selector', '[data-test^="remove-"]', res => {
+          const el = res.value && res.value[itemIndex];
+          if (el) {
+            this.api.elementIdClick(el.ELEMENT);
+          }
+        });
+        return this;
+      }
     }
   ]
 };

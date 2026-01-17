@@ -8,11 +8,14 @@
  * use this object instead of hardcoding selectors in the test file.
  */
 
+const credentials = require('./login_credentials');
+
 module.exports = {
   // Define URL
   url: process.env.BASE_URL || 'https://www.saucedemo.com/',
   
   // Define page elements and their selectors
+  // Selector strategy: use [data-test] where available; fallback to CSS when necessary to avoid brittle tests.
   elements: {
     title: '#root > div > div.login_logo',
     login_container: {
@@ -69,19 +72,20 @@ module.exports = {
        * 
        * Usage: loginPage.login('standard_user', 'secret_sauce')
        */
-      // TODO: Implement login function
-      // Hint: The function should:
-      //   1. Set the value of the username input
-      //   2. Set the value of the password input
-      //   3. Click the login button
-      //   4. Wait for navigation to complete
-      // login: function(username, password) {
-      //   return this
-      //     .setValue('@usernameInput', username)
-      //     .setValue('@passwordInput', password)
-      //     .click('@loginButton')
-      //     .waitForElementNotPresent('@loginButton', 5000); // Wait for navigation
-      // },
+      login: function(username, password) {
+        return this
+          .setValue('[data-test="username"]', username)
+          .setValue('[data-test="password"]', password)
+          .click('[data-test="login-button"]');
+      },
+
+      loginWithUser: function(userKey) {
+        const user = credentials.users[userKey];
+        const password = credentials.password;
+        return this
+          .login(user.username, password)
+          .waitForElementVisible('[data-test="title"]', 5000);
+      },
       
       
       /**
@@ -89,8 +93,13 @@ module.exports = {
        * 
        * Usage: loginPage.getErrorMessage((text) => { console.log(text); })
        */
-      // TODO: Implement getErrorMessage function
-      // Hint: Use getText() on the error message element
+      getErrorMessage: function(cb) {
+        const selector = '#login_button_container > div > form > div.error-message-container.error';
+        this.getText(selector, result => {
+          if (cb) cb(result.value);
+        });
+        return this;
+      },
       
       
       /**
@@ -98,8 +107,11 @@ module.exports = {
        * 
        * Usage: loginPage.isErrorVisible((isVisible) => { console.log(isVisible); })
        */
-      // TODO: Implement isErrorVisible function
-      // Hint: Use elementIdDisplayed() or check visibility with expect()
+      isErrorVisible: function() {
+        const selector = '#login_button_container > div > form > div.error-message-container.error';
+        this.expect.element(selector).to.be.present;
+        return this;
+      }
     }
   ]
 };

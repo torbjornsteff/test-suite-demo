@@ -5,69 +5,55 @@
  * There are multiple steps: Shipping Info, Review, and Confirmation.
  */
 
+const header = require('./components/headerComponent');
+const footer = require('./components/footerComponent');
+const credentials = require('./login_credentials');
+
 module.exports = {
   // Define selectors for checkout page elements
+  // Selector strategy: prefer [data-test] attributes for stability; use CSS fallback only when necessary.
+  // Error icons share a common data-test; assert visibility relative to each field's container (first_name/last_name/postal_code).
   elements: {
-    // Step 1: Shipping Information
-    // TODO: Add first name input selector
-    // Hint: Find the input for first name
-    // firstNameInput: '#first-name',
+    header_container: header.elements,
+            
+        sub_header_menu_container:{
+          container_id: '[data-test="secondary-header"]',
+          title: '[data-test="title"]',
+          quantity_label: '[data-test="cart-quantity-label"]',
+          description_label: '[data-test="cart-desc-label"]',
+        },
+        
+       checkout_info_container:{
+          container: '[data-test="checkout_info_container"]',
+          first_name: {
+            inputfield: '[data-test="firstName"]',
+            error_state: '[data-test="times-circle"]'
+          } ,
+          last_name: {
+            inputfield: '[data-test="lastName"]',
+            error_state: '[data-test="times-circle"]'
+          },
+          postal_code: {
+            inputfield: '[data-test="postalCode"]',
+            error_state: '[data-test="times-circle"]'
+          }
+          
+        },
     
+        checkout_container:{
+          container: '#checkout_info_container > div > form > div.checkout_buttons',
+          continue_button: '[data-test="continue"]',
+          cancel_button: '[data-test="cancel"]',
+          
+        },
     
-    // TODO: Add last name input selector
-    // Hint: Find the input for last name
-    // lastNameInput: '#last-name',
-    
-    
-    // TODO: Add postal code input selector
-    // Hint: Find the input for postal/zip code
-    // postalCodeInput: '#postal-code',
-    
-    
-    // TODO: Add continue button selector (for shipping info step)
-    // Hint: Find the "Continue" button on the shipping form
-    // continueButton: '#continue',
-    
-    
-    // Step 2: Review Order
-    // TODO: Add order summary container selector
-    // Hint: Find where order details/summary is displayed
-    // orderSummary: '.summary_info',
-    
-    
-    // TODO: Add item total selector
-    // Hint: Find where item total is displayed
-    // itemTotal: '.summary_subtotal_label',
-    
-    
-    // TODO: Add tax amount selector
-    // Hint: Find where tax is displayed
-    // taxAmount: '.summary_tax_label',
-    
-    
-    // TODO: Add order total selector
-    // Hint: Find where total price is displayed
-    // orderTotal: '.summary_total_label',
-    
-    
-    // Step 3: Confirmation
-    // TODO: Add finish button selector
-    // Hint: Find the "Finish" button to complete purchase
-    // finishButton: '#finish',
-    
-    
-    // TODO: Add success message selector
-    // Hint: Find the thank you/success message element
-    // successMessage: '.complete-header',
-    
-    
-    // TODO: Add error message selector
-    // Hint: Find error message elements (if any validation fails)
-    // errorMessage: '[data-test="error"]',
+        footer_container: footer.elements,
   },
   
   commands: [
     {
+      // Commands model user actions to keep tests declarative.
+      // Tests should assert outcomes (titles, success messages, error visibility) rather than implementation details.
       /**
        * Fill in shipping information
        * 
@@ -77,11 +63,17 @@ module.exports = {
        * 
        * Usage: checkoutPage.fillShippingInfo('John', 'Doe', '12345')
        */
-      // TODO: Implement fillShippingInfo
-      // Hint: Set values for all three input fields:
-      //   1. Set first name input
-      //   2. Set last name input
-      //   3. Set postal code input
+      fillShippingInfo: function(firstName, lastName, postalCode) {
+        return this
+          .setValue('[data-test="firstName"]', firstName)
+          .setValue('[data-test="lastName"]', lastName)
+          .setValue('[data-test="postalCode"]', postalCode);
+      },
+
+      fillShippingInfoFromUser: function(userKey) {
+        const user = credentials.users[userKey];
+        return this.fillShippingInfo(user.first_name, user.last_name, user.zip_code);
+      },
       
       
       /**
@@ -89,8 +81,9 @@ module.exports = {
        * 
        * Usage: checkoutPage.clickContinue()
        */
-      // TODO: Implement clickContinue
-      // Hint: Click the continue button
+      clickContinue: function() {
+        return this.click('[data-test="continue"]');
+      },
       
       
       /**
@@ -108,8 +101,9 @@ module.exports = {
        * 
        * Usage: checkoutPage.clickFinish()
        */
-      // TODO: Implement clickFinish
-      // Hint: Click the finish button
+      clickFinish: function() {
+        return this.click('#finish');
+      },
       
       
       /**
@@ -117,8 +111,12 @@ module.exports = {
        * 
        * Usage: checkoutPage.getSuccessMessage((message) => { console.log(message); })
        */
-      // TODO: Implement getSuccessMessage
-      // Hint: Get text from the success message element
+      getSuccessMessage: function(cb) {
+        this.getText('.complete-header', result => {
+          if (cb) cb(result.value);
+        });
+        return this;
+      },
       
       
       /**
@@ -126,8 +124,10 @@ module.exports = {
        * 
        * Usage: checkoutPage.verifyOrderComplete()
        */
-      // TODO: Implement verifyOrderComplete
-      // Hint: Check that success message is visible and contains expected text
+      verifyOrderComplete: function(expected = 'Thank you for your order!') {
+        this.expect.element('.complete-header').text.to.contain(expected);
+        return this;
+      }
     }
   ]
 };

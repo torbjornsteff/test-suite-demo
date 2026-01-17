@@ -27,6 +27,7 @@ module.exports = {
       },
     },
     
+    // Repeated list: use 'items' and match by text for stability; avoid nth-of-type unless order is guaranteed.
     inventory_list_container:{
       container: '[class="inventory_list"]',
       items: '[data-test="inventory-item"]',
@@ -38,37 +39,10 @@ module.exports = {
         // Format: item-{productId}-img-link (e.g., item-1-img-link, item-2-img-link)
         image: '[data-test="item-{productId}-img-link"]',
       },
+      // Uses data-test prefix to work across products consistently.
       addToCartButton: '[data-test^="add-to-cart"]',
     },
     footer_container: footer.elements,
-    // TODO: Add inventory container selector
-    // Hint: Find the main container that holds all products
-    // inventoryContainer: '.inventory',
-    
-    
-    // TODO: Add product item selector
-    // Hint: Find individual product items (they're likely in a list/grid)
-    // productItem: '.inventory_item',
-    
-    
-    // TODO: Add "Add to Cart" button selector
-    // Hint: Find the button that adds items to cart (usually contains "Add to Cart" text)
-    // addToCartButton: '[data-test="add-to-cart-sauce-labs-backpack"]',
-    
-    
-    // TODO: Add shopping cart badge selector
-    // Hint: Find the badge that shows cart item count (top right area)
-    // cartBadge: '.shopping_cart_badge',
-    
-    
-    // TODO: Add shopping cart link selector
-    // Hint: Find the shopping cart icon/link to view cart
-    // cartLink: '.shopping_cart_link',
-    
-    
-    // TODO: Add page title or heading selector (to verify page loaded)
-    // Hint: Find a heading like "Products" or the main title
-    // pageTitle: '.title',
   },
   
   commands: [
@@ -78,8 +52,11 @@ module.exports = {
        * 
        * Usage: inventoryPage.verifyPageLoaded()
        */
-      // TODO: Implement verifyPageLoaded
-      // Hint: Check that inventory container is visible
+      verifyPageLoaded: function() {
+        this.waitForElementVisible('[class="inventory_list"]', 5000);
+        this.expect.element('[data-test="title"]').text.to.contain('Products');
+        return this;
+      },
       
       
       /**
@@ -87,8 +64,9 @@ module.exports = {
        * 
        * Usage: inventoryPage.addFirstProductToCart()
        */
-      // TODO: Implement addFirstProductToCart
-      // Hint: Click the first "Add to Cart" button
+      addFirstProductToCart: function() {
+        return this.click('[data-test^="add-to-cart"]');
+      },
       
       
       /**
@@ -96,8 +74,13 @@ module.exports = {
        * 
        * Usage: inventoryPage.getCartCount((count) => { console.log(count); })
        */
-      // TODO: Implement getCartCount
-      // Hint: Get text from cart badge and parse as integer
+      getCartCount: function(cb) {
+        this.getText('.shopping_cart_badge', result => {
+          const count = parseInt(result.value || '0', 10);
+          if (cb) cb(count);
+        });
+        return this;
+      },
       
       
       /**
@@ -105,8 +88,9 @@ module.exports = {
        * 
        * Usage: inventoryPage.clickCart()
        */
-      // TODO: Implement clickCart
-      // Hint: Click the cart link/icon
+      clickCart: function() {
+        return this.click('.shopping_cart_link');
+      },
       
       
       /**
@@ -116,8 +100,17 @@ module.exports = {
        * 
        * Usage: inventoryPage.getProductButtonText(0, (text) => { console.log(text); })
        */
-      // TODO: Implement getProductButtonText
-      // Hint: Find the button text of a specific product by index
+      getProductButtonText: function(productIndex, cb) {
+        const selector = '.inventory_list .inventory_item .pricebar button';
+        this.api.elements('css selector', selector, res => {
+          const el = res.value && res.value[productIndex];
+          if (!el) { if (cb) cb(null); return; }
+          this.api.elementIdText(el.ELEMENT, textRes => {
+            if (cb) cb(textRes.value);
+          });
+        });
+        return this;
+      }
     }
   ]
 };
