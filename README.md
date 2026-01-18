@@ -7,13 +7,25 @@ Automated tests for [Sauce Labs Demo Application](https://www.saucedemo.com/) us
 - [Node.js](https://nodejs.org/) (v18+) - includes npm
 - [Chrome browser](https://www.google.com/chrome/)
 
-**Note**: Java is not required. This suite uses ChromeDriver directly via WebDriver mode.
-
+**Note**: Java is not required. This suite uses ChromeDriver directly via WebDriver mode. If you encounter any issues related to Java, it can be downloaded from [here](https://www.java.com/en/download/).
 ## Installation
 
+### 1. Clone the repository
+
+**HTTPS (recommended):**
 ```bash
-git clone <your-repo-url>
+git clone <[https://github.com/torbjornsteff/test-suite-demo.git](https://github.com/torbjornsteff/test-suite-demo.git)
 cd test-suite-demo
+```
+
+**SSH:**
+```bash
+git clone [git@github.com:torbjornsteff/test-suite-demo.git](git@github.com:torbjornsteff/test-suite-demo.git)
+cd test-suite-demo
+```
+
+### 2. Install dependencies
+```bash
 npm install
 ```
 
