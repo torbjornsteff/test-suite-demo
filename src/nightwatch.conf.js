@@ -7,7 +7,6 @@ module.exports = {
   // Test environments available
   src_folders: ['src/tests'], // Where test files are located
   page_objects_path: ['src/pages'], // Where page objects are located
-  custom_commands_path: ['src/customcommands'], // Where custom commands are located
   
   // Set default environment explicitly to Chrome
   test_environment: 'default',
