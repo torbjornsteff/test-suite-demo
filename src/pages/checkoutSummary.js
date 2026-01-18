@@ -56,37 +56,5 @@ module.exports = {
         },
     
         footer_container: footer.elements,
-      },
-
-  commands: [
-    {
-      getTotals: function(cb) {
-        const subtotalSel = '.summary_subtotal_label';
-        const taxSel = '.summary_tax_label';
-        const totalSel = '.summary_total_label';
-        const result = {};
-        this.getText(subtotalSel, r1 => {
-          result.subtotal = r1.value;
-          this.getText(taxSel, r2 => {
-            result.tax = r2.value;
-            this.getText(totalSel, r3 => {
-              result.total = r3.value;
-              if (cb) cb(result);
-            });
-          });
-        });
-        return this;
-      },
-
-      clickFinish: function() {
-        return this.click('#finish');
-      },
-
-      verifyItemPresent: function(name) {
-        const itemNameSel = '[data-test="inventory-item-name"], .inventory_item_name';
-        this.expect.element(itemNameSel).text.to.contain(name);
-        return this;
       }
-    }
-  ]
 }           

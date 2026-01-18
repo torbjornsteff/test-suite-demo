@@ -7,7 +7,7 @@
 
 // ========== IMPORTS & PAGE OBJECTS ==========
 const logHelper = require('../helpers/logHelper');
-const loginPage = require('../pages/loginPage');
+const loginHelper = require('../helpers/loginHelper');
 const inventoryPage = require('../pages/inventoryPage');
 const cartPage = require('../pages/cartPage');
 const customerInfoPage = require('../pages/checkoutPage');
@@ -16,15 +16,16 @@ const {users, password} = require('../pages/login_credentials');
 
 // ========== ELEMENT SHORTCUTS ==========
 const user = users.standard_user;
-const loginPageElements = loginPage.elements;
-const loginPageUrl = loginPage.url;
-const inventoryUrl = inventoryPage.url;
 const cartUrl = cartPage.url;
 const customerInfoUrl = customerInfoPage.url;
 const customerInfoInput = customerInfoPage.elements.checkout_info_container;
 const customerInfoButtons = customerInfoPage.elements.checkout_container;
 const shopping_cart_badge = headerComponent.elements.primary_header.shopping_cart_badge;
 const cartButton = headerComponent.elements.primary_header.shopping_cart_button;
+const addToCartButton = inventoryPage.elements.inventory_list_container.sauce_labs_backpack;
+const checkoutButton = cartPage.elements.cart_footer_container.checkout_button;
+const continueButton = customerInfoButtons.continue_button;
+const errorContainer = customerInfoPage.elements.error_state.errorMessage;
 
 // ========== TEST SUITE ==========
 module.exports = {
@@ -37,14 +38,55 @@ module.exports = {
   },
 
   'Checkout form validation with empty fields': async (browser) => {
-    // TODO: Login with valid credentials (reuse happy path logic)
-    // TODO: Add item to cart
-    // TODO: Navigate to cart
-    // TODO: Click checkout button
-    // TODO: Navigate to checkout form
-    // TODO: Try to click continue button WITHOUT filling any fields
-    // TODO: Verify error message/state appears for empty fields
-    // TODO: Verify form does NOT submit (user stays on same page)
+    
+    // ===== SETUP: Login and navigate to checkout form =====
+    logHelper.step('Login as standard_user', user.username);
+    const loginResult = await loginHelper.login(browser, user);
+    browser.assert.ok(loginResult.success, loginResult.errorText || 'Login should succeed');
+    logHelper.pass('Logged in successfully', user.username);
+
+    // Add first item to cart
+    logHelper.step('Add item to cart', user.username);
+    
+    await browser.waitForElementVisible(addToCartButton, 5000);
+    await browser.click(addToCartButton);
+    await browser.waitForElementVisible(shopping_cart_badge, 3000);
+    logHelper.pass('Item added to cart', user.username);
+
+    // Navigate to cart
+    logHelper.step('Navigate to cart', user.username);
+    await browser.click(cartButton);
+    await browser.assert.urlEquals(cartUrl);
+    logHelper.pass('On cart page', user.username);
+
+    // Click checkout
+    logHelper.step('Click checkout button', user.username);
+    await browser.waitForElementVisible(checkoutButton, 5000);
+    await browser.click(checkoutButton);
+    await browser.assert.urlEquals(customerInfoUrl);
+    logHelper.pass('On checkout form page', user.username);
+
+    // ===== TEST: Attempt continue with empty fields =====
+    logHelper.step('Click continue without filling fields', user.username);
+    await browser.waitForElementVisible(continueButton, 3000);
+    await browser.click(continueButton);
+
+    // Verify error message appears (generic error container pattern like login page)
+    logHelper.step('Verify error message displayed for empty fields', user.username);
+    await browser.waitForElementVisible(errorContainer, 3000);
+    await browser.assert.visible(errorContainer);
+    await browser.getText(errorContainer, (result) => {
+      if (result.value.includes('Error:')) {
+        logHelper.pass(`Field validation error displayed: ${result.value}`, user.username);
+      } else {
+        logHelper.fail(`Unexpected error text: ${result.value}`, user.username);
+      }
+    });
+
+    // Verify URL remains on customer info page (form did not submit)
+    logHelper.step('Verify form did not submit (still on checkout page)', user.username);
+    await browser.assert.urlEquals(customerInfoUrl);
+    logHelper.pass('Form submission blocked correctly', user.username);
   },
 
   after: async (browser) => {

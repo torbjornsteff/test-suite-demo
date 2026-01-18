@@ -60,20 +60,17 @@ module.exports = {
     
     logHelper.step('Verify error message appears');   
     await browser.waitForElementVisible(errorSelector, 5000);
-    const errorText = await browser.getText(errorSelector);
-    if (errorText.includes('Epic sadface: Username and password do not match any user in this service')) {
-      logHelper.pass('Correct error message is displayed for invalid login');
-    } else {
-      logHelper.fail('Incorrect error message displayed');
-    }
+    await browser.getText(errorSelector, (result) => {
+      if (result.value.includes('Epic sadface: Username and password do not match')) {
+        logHelper.pass('Correct error message is displayed for invalid login');
+      } else {
+        logHelper.fail(`Incorrect error message: ${result.value}`);
+      }
+    });
 
     logHelper.step('Verify user is NOT logged in');
-    const isLoginContainerVisible = await browser.isVisible(loginContainer);
-    if (isLoginContainerVisible) {
-      logHelper.pass('User is not logged in, login container is still visible');
-    } else {
-      logHelper.fail('User is logged in, login container is not visible');
-    }
+    await browser.assert.visible(loginContainer, 'Login container still visible (user not logged in)', 5000);
+    logHelper.pass('User is not logged in, login container is still visible');
   },
 
   after: async (browser) => {

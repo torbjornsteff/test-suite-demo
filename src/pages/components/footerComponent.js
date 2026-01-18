@@ -21,27 +21,5 @@ module.exports = {
       linkedin_link: '[data-test="social-linkedin"]',
     },
     copyright_text: '[data-test="footer_copy"]',
-  },
-
-  commands: [
-    {
-      /**
-       * Click social media link
-       * 
-       * @param {string} platform - Social media platform (twitter, facebook, linkedin)
-       * 
-       * Usage: footer.clickSocialLink('twitter')
-       */
-      // TODO: Implement clickSocialLink
-      // Hint: Click the specified social media link
-
-      /**
-       * Get copyright text
-       * 
-       * Usage: footer.getCopyrightText((text) => { console.log(text); })
-       */
-      // TODO: Implement getCopyrightText
-      // Hint: Get the copyright text content
-    }
-  ]
+  }
 };

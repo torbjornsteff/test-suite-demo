@@ -31,49 +31,5 @@ module.exports = {
       about_link: '[data-test="about-sidebar-link"]',
       reset_app_state_link: '[data-test="reset-sidebar-link"]',
     }
-  },
-
-  commands: [
-    {
-      /**
-       * Open burger menu
-       * 
-       * Usage: header.openBurgerMenu()
-       */
-      // TODO: Implement openBurgerMenu
-      // Hint: Click the burger menu button
-
-      /**
-       * Close burger menu
-       * 
-       * Usage: header.closeBurgerMenu()
-       */
-      // TODO: Implement closeBurgerMenu
-      // Hint: Click the close button
-
-      /**
-       * Click logout from burger menu
-       * 
-       * Usage: header.logout()
-       */
-      // TODO: Implement logout
-      // Hint: Click the logout link
-
-      /**
-       * Click shopping cart
-       * 
-       * Usage: header.clickCart()
-       */
-      // TODO: Implement clickCart
-      // Hint: Click the shopping cart button
-
-      /**
-       * Check if burger menu is visible
-       * 
-       * Usage: header.isBurgerMenuVisible()
-       */
-      // TODO: Implement isBurgerMenuVisible
-      // Hint: Check if menu container is visible
-    }
-  ]
+  }
 };

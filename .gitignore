@@ -13,6 +13,7 @@ npm-debug.log*
 
 # Test results and screenshots
 tests/results/
+tests_output/
 screenshots/
 selenium-debug.log
 

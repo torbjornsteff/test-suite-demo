@@ -42,76 +42,9 @@ module.exports = {
       },
       // Uses data-test prefix to work across products consistently.
       addToCartButton: '[data-test^="add-to-cart"]',
+      // Product-specific buttons
+      sauce_labs_backpack: '[data-test="add-to-cart-sauce-labs-backpack"]',
     },
     footer_container: footer.elements,
-  },
-  
-  commands: [
-    {
-      /**
-       * Verify inventory page is loaded
-       * 
-       * Usage: inventoryPage.verifyPageLoaded()
-       */
-      verifyPageLoaded: function() {
-        this.waitForElementVisible('[class="inventory_list"]', 5000);
-        this.expect.element('[data-test="title"]').text.to.contain('Products');
-        return this;
-      },
-      
-      
-      /**
-       * Add first product to cart
-       * 
-       * Usage: inventoryPage.addFirstProductToCart()
-       */
-      addFirstProductToCart: function() {
-        return this.click('[data-test^="add-to-cart"]');
-      },
-      
-      
-      /**
-       * Get cart item count
-       * 
-       * Usage: inventoryPage.getCartCount((count) => { console.log(count); })
-       */
-      getCartCount: function(cb) {
-        this.getText('.shopping_cart_badge', result => {
-          const count = parseInt(result.value || '0', 10);
-          if (cb) cb(count);
-        });
-        return this;
-      },
-      
-      
-      /**
-       * Click on shopping cart
-       * 
-       * Usage: inventoryPage.clickCart()
-       */
-      clickCart: function() {
-        return this.click('.shopping_cart_link');
-      },
-      
-      
-      /**
-       * Get button text for a product
-       * 
-       * @param {number} productIndex - Index of the product (0-based)
-       * 
-       * Usage: inventoryPage.getProductButtonText(0, (text) => { console.log(text); })
-       */
-      getProductButtonText: function(productIndex, cb) {
-        const selector = '.inventory_list .inventory_item .pricebar button';
-        this.api.elements('css selector', selector, res => {
-          const el = res.value && res.value[productIndex];
-          if (!el) { if (cb) cb(null); return; }
-          this.api.elementIdText(el.ELEMENT, textRes => {
-            if (cb) cb(textRes.value);
-          });
-        });
-        return this;
-      }
-    }
-  ]
+  }
 };

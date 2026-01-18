@@ -45,90 +45,12 @@ module.exports = {
           container: '#checkout_info_container > div > form > div.checkout_buttons',
           continue_button: '[data-test="continue"]',
           cancel_button: '[data-test="cancel"]',
-          
+        },
+
+        error_state: {
+          errorMessage: '[data-test="error"]',
         },
     
         footer_container: footer.elements,
-  },
-  
-  commands: [
-    {
-      // Commands model user actions to keep tests declarative.
-      // Tests should assert outcomes (titles, success messages, error visibility) rather than implementation details.
-      /**
-       * Fill in shipping information
-       * 
-       * @param {string} firstName - First name
-       * @param {string} lastName - Last name
-       * @param {string} postalCode - Postal/zip code
-       * 
-       * Usage: checkoutPage.fillShippingInfo('John', 'Doe', '12345')
-       */
-      fillShippingInfo: function(firstName, lastName, postalCode) {
-        return this
-          .setValue('[data-test="firstName"]', firstName)
-          .setValue('[data-test="lastName"]', lastName)
-          .setValue('[data-test="postalCode"]', postalCode);
-      },
-
-      fillShippingInfoFromUser: function(userKey) {
-        const user = credentials.users[userKey];
-        return this.fillShippingInfo(user.first_name, user.last_name, user.zip_code);
-      },
-      
-      
-      /**
-       * Click continue button on shipping step
-       * 
-       * Usage: checkoutPage.clickContinue()
-       */
-      clickContinue: function() {
-        return this.click('[data-test="continue"]');
-      },
-      
-      
-      /**
-       * Get order total amount
-       * 
-       * Usage: checkoutPage.getOrderTotal((total) => { console.log(total); })
-       */
-      // TODO: Implement getOrderTotal
-      // Hint: Get text from order total element
-      //       Extract just the number part (e.g., "$58.29" -> 58.29)
-      
-      
-      /**
-       * Click finish button to complete purchase
-       * 
-       * Usage: checkoutPage.clickFinish()
-       */
-      clickFinish: function() {
-        return this.click('#finish');
-      },
-      
-      
-      /**
-       * Get success message text
-       * 
-       * Usage: checkoutPage.getSuccessMessage((message) => { console.log(message); })
-       */
-      getSuccessMessage: function(cb) {
-        this.getText('.complete-header', result => {
-          if (cb) cb(result.value);
-        });
-        return this;
-      },
-      
-      
-      /**
-       * Verify checkout completed successfully
-       * 
-       * Usage: checkoutPage.verifyOrderComplete()
-       */
-      verifyOrderComplete: function(expected = 'Thank you for your order!') {
-        this.expect.element('.complete-header').text.to.contain(expected);
-        return this;
-      }
-    }
-  ]
+  }
 };
