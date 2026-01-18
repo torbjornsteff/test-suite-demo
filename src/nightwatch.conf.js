@@ -9,25 +9,42 @@ module.exports = {
   page_objects_path: ['src/pages'], // Where page objects are located
   custom_commands_path: ['src/customcommands'], // Where custom commands are located
   
+  // Set default environment explicitly to Chrome
+  test_environment: 'default',
+  
   // Global test settings
   test_settings: {
     default: {
-      // Browser and Selenium configuration
-      selenium: {
-        start_process: true, // Let Nightwatch manage Selenium
-        server_path: require('@nightwatch/selenium-server').path, // Path to Selenium
-        port: 4444, // Selenium server port
+      // WebDriver configuration (using ChromeDriver, no Java needed)
+      webdriver: {
+        start_process: true,
+        server_path: require('chromedriver').path,
+        port: 9515,
+        cli_args: ['--verbose']
       },
       
-      // Browser capabilities
+      // Browser capabilities - MUST include browserName for Nightwatch to recognize Chrome
       desiredCapabilities: {
-        browserName: 'chrome', // Use Chrome browser
+        browserName: 'chrome',
         chromeOptions: {
-          w3c: false, // Use JSONWire protocol for compatibility
           args: [
             '--disable-gpu',
-            '--window-size=1920,1080'
-          ]
+            '--window-size=1920,1080',
+            '--disable-blink-features=AutomationControlled',
+            '--disable-save-password-bubble',
+            '--disable-features=PasswordManager,PasswordManagerFallback',
+            '--no-first-run',
+            '--no-default-browser-check',
+            '--password-store=basic'
+          ],
+          prefs: {
+            'credentials_enable_service': false,
+            'profile.password_manager_enabled': false,
+            'profile.password_manager_leak_detection': false,
+            'profile.default_content_setting_values.notifications': 2,
+            'autofill.profile_enabled': false
+          },
+          excludeSwitches: ['enable-automation', 'enable-logging']
         }
       },
       
@@ -49,26 +66,73 @@ module.exports = {
     
     // Configuration for headless testing (no GUI)
     headless: {
-      selenium: {
+      webdriver: {
         start_process: true,
-        server_path: require('@nightwatch/selenium-server').path,
-        port: 4444,
+        server_path: require('chromedriver').path,
+        port: 9515,
+        cli_args: ['--verbose']
       },
       
       desiredCapabilities: {
         browserName: 'chrome',
         chromeOptions: {
-          w3c: false,
           args: [
             '--disable-gpu',
             '--window-size=1920,1080',
-            '--headless', // Run without GUI
-            '--no-sandbox', // Required for some environments
-            '--disable-dev-shm-usage' // Reduce memory usage
-          ]
+            '--headless',
+            '--no-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-blink-features=AutomationControlled',
+            '--disable-save-password-bubble',
+            '--disable-features=PasswordManager,PasswordManagerFallback',
+            '--no-first-run',
+            '--no-default-browser-check',
+            '--password-store=basic'
+          ],
+          prefs: {
+            'credentials_enable_service': false,
+            'profile.password_manager_enabled': false,
+            'profile.password_manager_leak_detection': false,
+            'profile.default_content_setting_values.notifications': 2,
+            'autofill.profile_enabled': false
+          },
+          excludeSwitches: ['enable-automation', 'enable-logging']
         }
       },
       
+      globals: {
+        waitForConditionTimeout: 5000,
+        retryAssertionTimeout: 5000,
+      },
+    },
+
+    // Configuration for Firefox browser testing
+    firefox: {
+      webdriver: {
+        start_process: true,
+        server_path: require('geckodriver').path,
+        port: 4444,
+        cli_args: ['--verbose']
+      },
+
+      desiredCapabilities: {
+        browserName: 'firefox',
+        'moz:firefoxOptions': {
+          args: [
+            '--width=1920',
+            '--height=1080'
+          ],
+          prefs: {
+            'dom.disable_beforeunload': true,
+            'extensions.update.autoUpdateDefault': false,
+          }
+        }
+      },
+
+      silent: true,
+      output: true,
+      disable_colors: false,
+
       globals: {
         waitForConditionTimeout: 5000,
         retryAssertionTimeout: 5000,

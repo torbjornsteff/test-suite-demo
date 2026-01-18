@@ -9,6 +9,7 @@ const header = require('./components/headerComponent');
 const footer = require('./components/footerComponent');
 
 module.exports = {
+  url: 'https://www.saucedemo.com/inventory.html',
   // Define selectors for inventory page elements
   elements: {
     header_container: header.elements,

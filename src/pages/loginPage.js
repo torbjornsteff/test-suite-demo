@@ -73,10 +73,11 @@ module.exports = {
        * Usage: loginPage.login('standard_user', 'secret_sauce')
        */
       login: function(username, password) {
+        const loginElements = this.elements.login_container;
         return this
-          .setValue('[data-test="username"]', username)
-          .setValue('[data-test="password"]', password)
-          .click('[data-test="login-button"]');
+          .setValue(loginElements.usernameInput, username)
+          .setValue(loginElements.passwordInput, password)
+          .click(loginElements.loginButton);
       },
 
       loginWithUser: function(userKey) {
@@ -84,7 +85,7 @@ module.exports = {
         const password = credentials.password;
         return this
           .login(user.username, password)
-          .waitForElementVisible('[data-test="title"]', 5000);
+          .waitForElementVisible(this.elements.title, 5000);
       },
       
       
@@ -94,7 +95,7 @@ module.exports = {
        * Usage: loginPage.getErrorMessage((text) => { console.log(text); })
        */
       getErrorMessage: function(cb) {
-        const selector = '#login_button_container > div > form > div.error-message-container.error';
+        const selector = this.elements.login_container.error_state.errorMessage;
         this.getText(selector, result => {
           if (cb) cb(result.value);
         });
@@ -108,7 +109,7 @@ module.exports = {
        * Usage: loginPage.isErrorVisible((isVisible) => { console.log(isVisible); })
        */
       isErrorVisible: function() {
-        const selector = '#login_button_container > div > form > div.error-message-container.error';
+        const selector = this.elements.login_container.error_state.errorMessage;
         this.expect.element(selector).to.be.present;
         return this;
       }

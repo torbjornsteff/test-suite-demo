@@ -13,18 +13,19 @@ module.exports = {
   // Define selectors for checkout page elements
   // Selector strategy: prefer [data-test] attributes for stability; use CSS fallback only when necessary.
   // Error icons share a common data-test; assert visibility relative to each field's container (first_name/last_name/postal_code).
+  url: 'https://www.saucedemo.com/checkout-step-one.html',
   elements: {
     header_container: header.elements,
             
         sub_header_menu_container:{
-          container_id: '[data-test="secondary-header"]',
+          container: '[data-test="secondary-header"]',
           title: '[data-test="title"]',
           quantity_label: '[data-test="cart-quantity-label"]',
           description_label: '[data-test="cart-desc-label"]',
         },
         
        checkout_info_container:{
-          container: '[data-test="checkout_info_container"]',
+          container: '[data-test="checkout-info-container"]',
           first_name: {
             inputfield: '[data-test="firstName"]',
             error_state: '[data-test="times-circle"]'

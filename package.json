@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nightwatch -c src/nightwatch.conf.js",
+    "test": "nightwatch -c src/nightwatch.conf.js --env default",
+    "test:chrome": "nightwatch -c src/nightwatch.conf.js --env default",
     "test:headless": "nightwatch -c src/nightwatch.conf.js --env headless",
     "test:watch": "nightwatch -c src/nightwatch.conf.js --watch"
   },
@@ -22,7 +23,9 @@
   "homepage": "https://github.com/torbjornsteff/test-suite-demo#readme",
   "devDependencies": {
     "@nightwatch/selenium-server": "^4.20.0",
+    "chromedriver": "^143.0.0",
     "dotenv": "^17.2.3",
+    "geckodriver": "^6.1.0",
     "nightwatch": "^3.14.0"
   }
 }

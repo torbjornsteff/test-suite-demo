@@ -21,6 +21,7 @@ module.exports = {
       burger_menu_button: '[data-test="open-menu"]',
       page_title: '.#header_container > div.primary_header > div.header_label',
       shopping_cart_button: '[data-test="shopping-cart-link"]',
+      shopping_cart_badge: '[data-test="shopping-cart-badge"]',
     },
     burger_menu: {
       menu_container: '#menu_button_container > div > div.bm-menu-wrap', // Visible when menu is open

@@ -3,6 +3,7 @@ const footer = require('./components/footerComponent');
 
 module.exports = {
   // Define selectors for checkout page elements
+  url:'https://www.saucedemo.com/checkout-step-two.html',
   elements: {
     header_container: header.elements,
             
@@ -15,7 +16,7 @@ module.exports = {
           container: '[data-test="cart-list"]',
           quantity_label: '[data-test="cart-quantity-label"]',
           description_label: '[data-test="cart-desc-label"]',
-          // Summary list: repeated items addressed by index or text matching for stability.
+          // Summary list: repeated items addressed by index or text matching for stability. flagga
           summary_list: {
              container: '[data-test="inventory-item"]',
              item: {

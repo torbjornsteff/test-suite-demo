@@ -6,8 +6,10 @@
  */
 const header = require('./components/headerComponent');
 const footer = require('./components/footerComponent');
+const { url } = require('./loginPage');
 
 module.exports = {
+  url: 'https://www.saucedemo.com/cart.html',
   // Define selectors for cart page elements
   elements: {
     header_container: header.elements,
@@ -21,13 +23,13 @@ module.exports = {
     
     cart_list_container:{
       container: '[data-test="cart-list"]',
-      items: '[data-test="inventory_item"]',
+      items: '[data-test="inventory-item"]',
       item_elements: {
         quantity_label: '[data-test="cart-item-quantity"]',
         product_link: '[data-test="item-{itemId}-title-link"]', // Format: item-0-title-link, item-1-title-link, etc. (based on product position)
-        product_name: '[data-test="inventory_item_name"]',
-        product_description: '[data-test="inventory_item_desc"]',
-        product_price: '[data-test="inventory_item_price"]',
+        product_name: '[data-test="inventory-item-name"]',
+        product_description: '[data-test="inventory-item-desc"]',
+        product_price: '[data-test="inventory-item-price"]',
         remove_button: '[data-test^="remove-"]', // Matches any remove button (e.g., remove-sauce-labs-backpack)
       }
     },
